@@ -226,8 +226,8 @@ button:disabled {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #000;
-  border-top: 1px solid #333;
+  background: #fff;            /* fondo blanco */
+  border-top: 1px solid #ddd;  /* linea gris clara arriba */
   z-index: 10;
 }
 
@@ -236,10 +236,9 @@ button:disabled {
   margin: 0;
   padding: 6px;
   border-radius: 0;
-  color: #fff;
+  color: #000;                 /* el texto alternativo tambien en negro */
   font-size: 12px;
 }
-
 .icono-menu {
   width: 28px;
   height: 28px;
