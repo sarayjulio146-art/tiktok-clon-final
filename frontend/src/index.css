@@ -238,7 +238,7 @@ button:disabled {
   border-radius: 0;
   color: #000;                 /* el texto alternativo tambien en negro */
   font-size: 12px;
-}
+  }
 .icono-menu {
   width: 28px;
   height: 28px;
