@@ -10,23 +10,22 @@ body {
   color: #fff;
 }
 
-/* Contenedor central: en el celular ocupa todo el ancho,
-   en el computador mide maximo 480px y queda centrado */
+/* En el celular ocupa todo el ancho, en el computador maximo 480px centrado */
 #root {
   max-width: 480px;
   margin: 0 auto;
-  padding: 12px 12px 80px 12px; /* espacio abajo para que el menu no tape nada */
   min-height: 100vh;
   background: #121212;
+  position: relative;
 }
 
-h2 {
-  margin: 8px 0;
-  font-size: 20px;
+/* Pantallas con formularios (registro, buscar, perfil, subir) */
+.pagina {
+  padding: 16px 16px 90px 16px;
 }
 
-h3, h4 {
-  margin: 14px 0 8px;
+h2, h3, h4 {
+  margin: 12px 0 8px;
 }
 
 p {
@@ -34,10 +33,9 @@ p {
 }
 
 small {
-  color: #888;
+  color: #aaa;
 }
 
-/* Campos de texto oscuros que ocupan todo el ancho */
 input {
   width: 100%;
   padding: 12px;
@@ -53,9 +51,8 @@ input::placeholder {
   color: #888;
 }
 
-/* Botones rosados */
 button {
-  padding: 10px 14px;
+  padding: 10px 16px;
   margin: 4px 4px 4px 0;
   border: none;
   border-radius: 20px;
@@ -69,7 +66,155 @@ button:disabled {
   background: #555;
 }
 
-/* Menu fijo abajo, como en TikTok */
+/* Boton gris, para acciones secundarias */
+.boton-gris {
+  background: #333;
+}
+
+/* ---------- FEED ESTILO TIKTOK ---------- */
+
+/* El feed ocupa toda la pantalla menos el menu, y cada video "se pega" al hacer scroll */
+.feed {
+  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.aviso {
+  padding: 20px;
+}
+
+/* Cada video ocupa toda la altura del feed */
+.tarjeta {
+  position: relative;
+  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
+  scroll-snap-align: start;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-tarjeta {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Columna de botones a la derecha */
+.acciones {
+  position: absolute;
+  right: 10px;
+  bottom: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.boton-icono {
+  background: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  color: #fff;
+  border-radius: 0;
+}
+
+.icono {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+/* Nombre y descripcion abajo a la izquierda */
+.info {
+  position: absolute;
+  left: 12px;
+  right: 80px;
+  bottom: 20px;
+  text-shadow: 0 1px 4px #000;
+}
+
+/* Panel de comentarios que sube desde abajo */
+.panel-comentarios {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 65%;
+  overflow-y: auto;
+  background: #1c1c1c;
+  border-radius: 16px 16px 0 0;
+  padding: 12px;
+  z-index: 5;
+}
+
+/* Foto de perfil redonda (o una letra si no hay foto) */
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  display: block;
+  cursor: pointer;
+}
+
+.avatar-letra {
+  background: #fe2c55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.avatar.grande {
+  width: 96px;
+  height: 96px;
+  font-size: 40px;
+  cursor: default;
+}
+
+.avatar.chico {
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+}
+
+/* ---------- PERFIL Y BUSQUEDA ---------- */
+.perfil-cabecera {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* En el perfil los videos son mas pequenos que en el feed */
+.lista-perfil .tarjeta {
+  height: 480px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  scroll-snap-align: none;
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.resultado button {
+  margin-left: auto;
+}
+
+/* ---------- MENU DE ABAJO ---------- */
 .menu {
   position: fixed;
   bottom: 0;
@@ -77,32 +222,35 @@ button:disabled {
   transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
+  height: 60px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   background: #000;
   border-top: 1px solid #333;
-  padding: 8px 0;
   z-index: 10;
 }
 
-.menu button {
+.boton-menu {
   background: none;
-  color: #fff;
   margin: 0;
-  padding: 8px 6px;
-  font-size: 13px;
+  padding: 6px;
+  border-radius: 0;
+  color: #fff;
+  font-size: 12px;
 }
 
-/* El video se adapta al ancho de la pantalla */
-video {
-  width: 100%;
-  max-height: 70vh;
-  background: #000;
+.icono-menu {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+/* El boton del centro, amarillo como en la plantilla */
+.boton-mas {
+  background: #ffd60a;
   border-radius: 12px;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #333;
-  margin: 16px 0;
+  padding: 6px 14px;
+  color: #000;
 }

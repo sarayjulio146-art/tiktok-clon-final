@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, getDoc, query, where, doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "./config";
-import { VideoTarjeta } from "./videos";
+import { VideoTarjeta, Avatar, NOMBRE_NUBE, PRESET } from "./videos";
 
 // ---------- BUSCAR USUARIOS ----------
 export function Buscar(props) {
@@ -42,10 +42,11 @@ export function Buscar(props) {
       {busco && resultados.length == 0 && <p>No se encontraron usuarios</p>}
       {resultados.map(function(persona) {
         return (
-          <p key={persona.id}>
+          <div className="resultado" key={persona.id}>
+            <Avatar foto={persona.foto} nombre={persona.nombre} clase="chico" />
             <b>{persona.nombre}</b>
             <button onClick={function() { props.alAbrirPerfil(persona.id); }}>Ver perfil</button>
-          </p>
+          </div>
         );
       })}
     </div>
@@ -65,6 +66,7 @@ export function Perfil(props) {
   const [editando, setEditando] = useState(false);
   const [nombreNuevo, setNombreNuevo] = useState("");
   const [descripcionNueva, setDescripcionNueva] = useState("");
+  const [mensajeFoto, setMensajeFoto] = useState("");
 
   // Cada vez que cambia el perfil que vemos, traemos sus datos
   useEffect(function() {
@@ -135,7 +137,7 @@ export function Perfil(props) {
     }
   }
 
-  // Guardar los cambios del perfil propio
+  // Guardar los cambios del nombre y la descripcion
   function guardarPerfil() {
     if (nombreNuevo == "") {
       return;
@@ -153,9 +155,55 @@ export function Perfil(props) {
       };
       setPersona(datos);
       setEditando(false);
-      // Le avisamos a App para que actualice el nombre del saludo
+      // Le avisamos a App para que actualice los datos del usuario
       props.alActualizar(datos);
     });
+  }
+
+  // Subir una foto de perfil nueva
+  function cambiarFoto(evento) {
+    const archivo = evento.target.files[0];
+    if (!archivo) {
+      return;
+    }
+    setMensajeFoto("Subiendo foto...");
+
+    const formulario = new FormData();
+    formulario.append("file", archivo);
+    formulario.append("upload_preset", PRESET);
+
+    // 1. Subimos la imagen a Cloudinary
+    fetch("https://api.cloudinary.com/v1_1/" + NOMBRE_NUBE + "/image/upload", {
+      method: "POST",
+      body: formulario
+    })
+      .then(function(respuesta) {
+        return respuesta.json();
+      })
+      .then(function(datos) {
+        if (!datos.secure_url) {
+          throw new Error(datos.error ? datos.error.message : "No se pudo subir");
+        }
+        // 2. Guardamos el enlace de la foto en el perfil del usuario
+        return updateDoc(doc(db, "usuarios", usuario.id), { foto: datos.secure_url }).then(function() {
+          return datos.secure_url;
+        });
+      })
+      .then(function(urlFoto) {
+        const datos = {
+          id: usuario.id,
+          nombre: persona.nombre,
+          correo: persona.correo,
+          descripcion: persona.descripcion,
+          foto: urlFoto
+        };
+        setPersona(datos);
+        props.alActualizar(datos);
+        setMensajeFoto("Foto actualizada");
+      })
+      .catch(function(error) {
+        setMensajeFoto("Error: " + error.message);
+      });
   }
 
   if (persona == null) {
@@ -166,22 +214,31 @@ export function Perfil(props) {
 
   return (
     <div>
-      <h3>Perfil de {persona.nombre}</h3>
-      <p>{persona.descripcion}</p>
-      <p>
-        <b>{seguidores}</b> seguidores | <b>{seguidos}</b> seguidos
-      </p>
+      <div className="perfil-cabecera">
+        <Avatar foto={persona.foto} nombre={persona.nombre} clase="grande" />
+        <h3>@{persona.nombre}</h3>
+        <p>{persona.descripcion}</p>
+        <p>
+          <b>{seguidores}</b> seguidores | <b>{seguidos}</b> seguidos
+        </p>
 
-      {/* Si es mi perfil puedo editarlo, si no, puedo seguir */}
-      {esMiPerfil && !editando &&
-        <button onClick={function() { setEditando(true); }}>Editar perfil</button>
-      }
-      {!esMiPerfil &&
-        <button onClick={alternarSeguir}>{yoSigo ? "Dejar de seguir" : "Seguir"}</button>
-      }
+        {/* Si es mi perfil puedo editarlo, si no, puedo seguir */}
+        {esMiPerfil && !editando &&
+          <div>
+            <button onClick={function() { setEditando(true); }}>Editar perfil</button>
+            <button className="boton-gris" onClick={props.alSalir}>Cerrar sesión</button>
+          </div>
+        }
+        {!esMiPerfil &&
+          <button onClick={alternarSeguir}>{yoSigo ? "Dejar de seguir" : "Seguir"}</button>
+        }
+      </div>
 
       {editando &&
         <div>
+          <p>Foto de perfil:</p>
+          <input type="file" accept="image/*" onChange={cambiarFoto} />
+          <small>{mensajeFoto}</small>
           <input
             placeholder="Nombre"
             value={nombreNuevo}
@@ -193,15 +250,17 @@ export function Perfil(props) {
             onChange={function(evento) { setDescripcionNueva(evento.target.value); }}
           />
           <button onClick={guardarPerfil}>Guardar</button>
-          <button onClick={function() { setEditando(false); }}>Cancelar</button>
+          <button className="boton-gris" onClick={function() { setEditando(false); }}>Cancelar</button>
         </div>
       }
 
       <h4>Videos ({videos.length})</h4>
       {videos.length == 0 && <p>Todavía no ha publicado videos</p>}
-      {videos.map(function(video) {
-        return <VideoTarjeta key={video.id} video={video} usuario={usuario} />;
-      })}
+      <div className="lista-perfil">
+        {videos.map(function(video) {
+          return <VideoTarjeta key={video.id} video={video} usuario={usuario} alAbrirPerfil={props.alAbrirPerfil} />;
+        })}
+      </div>
     </div>
   );
 }

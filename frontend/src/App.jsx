@@ -45,7 +45,7 @@ function Registro(props) {
   }
 
   return (
-    <div>
+    <div className="pagina">  
       <h2>Crear cuenta</h2>
       <input
         placeholder="Nombre de usuario"
@@ -86,7 +86,7 @@ function Login(props) {
   }
 
   return (
-    <div>
+    <div className="pagina">
       <h2>Iniciar sesión</h2>
       <input
         placeholder="Correo"
@@ -158,43 +158,64 @@ function App() {
     return <p>Cargando...</p>;
   }
 
-  // Si hay usuario, mostramos la app con su menu
+    // Si hay usuario, mostramos la app con su menu
   if (usuario) {
     return (
       <div>
-        <h2>Hola, {usuario.nombre}</h2>
-        <div className="menu">
-  <button onClick={function() { setVista("inicio"); }}>Inicio</button>
-  <button onClick={function() { setVista("buscar"); }}>Buscar</button>
-  <button onClick={function() { abrirPerfil(usuario.id); }}>Mi perfil</button>
-  <button onClick={salir}>Cerrar sesión</button>
-</div>
-
+        {/* Feed: ocupa toda la pantalla */}
         {vista == "inicio" &&
-          <div>
-            <SubirVideo
-              usuario={usuario}
-              alPublicar={function() { setRecargar(recargar + 1); }}
-            />
-            <Feed recargar={recargar} usuario={usuario} />
+          <Feed recargar={recargar} usuario={usuario} alAbrirPerfil={abrirPerfil} />
+        }
+
+        {/* Las demas pantallas van dentro de "pagina" */}
+        {vista == "buscar" &&
+          <div className="pagina">
+            <Buscar alAbrirPerfil={abrirPerfil} />
           </div>
         }
 
-        {vista == "buscar" &&
-          <Buscar alAbrirPerfil={abrirPerfil} />
+        {vista == "subir" &&
+          <div className="pagina">
+            <SubirVideo
+              usuario={usuario}
+              alPublicar={function() {
+                setRecargar(recargar + 1);
+                setVista("inicio");
+              }}
+            />
+          </div>
         }
 
         {vista == "perfil" &&
-          <Perfil
-            perfilId={perfilId}
-            usuario={usuario}
-            alActualizar={function(datos) { setUsuario(datos); }}
-          />
+          <div className="pagina">
+            <Perfil
+              perfilId={perfilId}
+              usuario={usuario}
+              alActualizar={function(datos) { setUsuario(datos); }}
+              alAbrirPerfil={abrirPerfil}
+              alSalir={salir}
+            />
+          </div>
         }
+
+        {/* Menu de abajo con iconos */}
+        <div className="menu">
+          <button className="boton-menu" onClick={function() { setVista("inicio"); }}>
+            <img className="icono-menu" src="/iconos/inicio.png" alt="Inicio" />
+          </button>
+          <button className="boton-menu" onClick={function() { setVista("buscar"); }}>
+            <img className="icono-menu" src="/iconos/buscar.png" alt="Buscar" />
+          </button>
+          <button className="boton-menu boton-mas" onClick={function() { setVista("subir"); }}>
+            <img className="icono-menu" src="/iconos/mas.png" alt="Subir" />
+          </button>
+          <button className="boton-menu" onClick={function() { abrirPerfil(usuario.id); }}>
+            <img className="icono-menu" src="/iconos/perfil.png" alt="Perfil" />
+          </button>
+        </div>
       </div>
     );
   }
-
   // Si no hay usuario, mostramos registro o login
   if (pantalla == "registro") {
     return (
