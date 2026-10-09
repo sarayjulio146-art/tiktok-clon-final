@@ -240,19 +240,19 @@ export function VideoTarjeta(props) {
         <button className="boton-icono" onClick={alternarLike}>
           <img
             className="icono"
-            src={yaDiLike ? "/iconos/corazon-rojo.png" : "/iconos/corazon.png"}
+            src={yaDiLike ? "iconos/corazon-rojo.png" : "iconos/corazon.png"}
             alt="Me gusta"
           />
           <span>{cantidadLikes}</span>
         </button>
 
         <button className="boton-icono" onClick={function() { setVerComentarios(!verComentarios); }}>
-          <img className="icono" src="/iconos/comentario.png" alt="Comentarios" />
+          <img className="icono" src="iconos/comentario.png" alt="Comentarios" />
           <span>{comentarios.length}</span>
         </button>
 
         <button className="boton-icono" onClick={compartir}>
-          <img className="icono" src="/iconos/compartir.png" alt="Compartir" />
+          <img className="icono" src="iconos/compartir.png" alt="Compartir" />
           <span>Compartir</span>
         </button>
       </div>

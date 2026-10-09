@@ -201,16 +201,16 @@ function App() {
         {/* Menu de abajo con iconos */}
         <div className="menu">
           <button className="boton-menu" onClick={function() { setVista("inicio"); }}>
-            <img className="icono-menu" src="/iconos/inicio.png" alt="Inicio" />
+            <img className="icono-menu" src="iconos/inicio.png" alt="Inicio" />
           </button>
           <button className="boton-menu" onClick={function() { setVista("buscar"); }}>
-            <img className="icono-menu" src="/iconos/buscar.png" alt="Buscar" />
+            <img className="icono-menu" src="iconos/buscar.png" alt="Buscar" />
           </button>
           <button className="boton-menu boton-mas" onClick={function() { setVista("subir"); }}>
-            <img className="icono-menu" src="/iconos/mas.png" alt="Subir" />
+            <img className="icono-menu" src="iconos/mas.png" alt="Subir" />
           </button>
           <button className="boton-menu" onClick={function() { abrirPerfil(usuario.id); }}>
-            <img className="icono-menu" src="/iconos/perfil.png" alt="Perfil" />
+            <img className="icono-menu" src="iconos/perfil.png" alt="Perfil" />
           </button>
         </div>
       </div>
