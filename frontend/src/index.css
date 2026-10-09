@@ -1,0 +1,108 @@
+/* Estilo tipo TikTok: fondo oscuro y color rosado */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* Contenedor central: en el celular ocupa todo el ancho,
+   en el computador mide maximo 480px y queda centrado */
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px 12px 80px 12px; /* espacio abajo para que el menu no tape nada */
+  min-height: 100vh;
+  background: #121212;
+}
+
+h2 {
+  margin: 8px 0;
+  font-size: 20px;
+}
+
+h3, h4 {
+  margin: 14px 0 8px;
+}
+
+p {
+  margin: 6px 0;
+}
+
+small {
+  color: #888;
+}
+
+/* Campos de texto oscuros que ocupan todo el ancho */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border: 1px solid #333;
+  border-radius: 10px;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 16px; /* 16px evita que el celular haga zoom al escribir */
+}
+
+input::placeholder {
+  color: #888;
+}
+
+/* Botones rosados */
+button {
+  padding: 10px 14px;
+  margin: 4px 4px 4px 0;
+  border: none;
+  border-radius: 20px;
+  background: #fe2c55;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #555;
+}
+
+/* Menu fijo abajo, como en TikTok */
+.menu {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-around;
+  background: #000;
+  border-top: 1px solid #333;
+  padding: 8px 0;
+  z-index: 10;
+}
+
+.menu button {
+  background: none;
+  color: #fff;
+  margin: 0;
+  padding: 8px 6px;
+  font-size: 13px;
+}
+
+/* El video se adapta al ancho de la pantalla */
+video {
+  width: 100%;
+  max-height: 70vh;
+  background: #000;
+  border-radius: 12px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 16px 0;
+}
